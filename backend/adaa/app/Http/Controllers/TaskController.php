@@ -10,7 +10,7 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = Task::with('user')->get(); // Show all tasks with user info
+        $tasks = Task::with(['user', "image"])->get(); // Show all tasks with user info
         return response()->json(["message" => "success", "data" => $tasks], 200);
     }
 

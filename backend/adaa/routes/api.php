@@ -17,8 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/task/create', [TaskController::class, 'store']);
     Route::patch('/task/{task}', [TaskController::class, 'update']);
     Route::delete('/task/{task}', [TaskController::class, 'destroy']);
-    Route::post('/upload-image', [ImageUploadController::class, 'store']);
-    Route::post('/delete-image/{image}', [ImageUploadController::class, 'destroy']);
+    Route::post('/upload-image', [ImageUploadController::class, 'upload']);
+    Route::delete('/delete-image/{image}', [ImageUploadController::class, 'delete']);
 });
 
 // Verify email routes

@@ -4,43 +4,81 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Image;
 
 class ImageUploadController extends Controller
 {
 
-    public function store(Request $request)
+    public function upload(Request $request)
     {
-        // Validate the incoming request to ensure a valid image is uploaded
         $request->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png,gif,svg|max:5048', // Max size 5MB
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048'
         ]);
 
-        print_r("hello");
+        try {
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
 
-        // Store the uploaded file in the 'public' disk (accessible via URL)
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $image = $request->file('image');
+                // Store the file
+                $path = $file->storeAs('public/images', $filename);
 
-            // Generate a unique file name for the image
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+                // Create database record
+                $image = Image::create([
+                    'filename' => $filename,
+                    'path' => $path,
+                    'url' => Storage::url($path)
+                ]);
 
-            // Store the image in the 'public' directory
-            $path = $image->storeAs('images', $imageName, 'public');  // Store under `storage/app/public/images/`
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Image uploaded successfully',
+                    'data' => [
+                        'id' => $image->id,
+                        'filename' => $image->filename,
+                        'url' => $image->url
+                    ]
+                ], 201);
+            }
 
-            // Optionally, save the path to the database for later use
-            // Task::create(['image_path' => $path]);
+            return response()->json([
+                'success' => false,
+                'message' => 'No image file provided'
+            ], 400);
 
-            // Return success response or redirect
-            return response()->with('success', 'Image uploaded successfully')->with('path', $path);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error uploading image',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->withErrors(['image' => 'Image upload failed.']);
     }
 
-
-    public function destroy(string $image)
+    public function delete($id)
     {
-        Storage::disk('public')->delete('images/' . $image);
-        return response()->json(['message' => 'Image deleted']);
+        try {
+            $image = Image::findOrFail($id);
+
+            // Delete the file from storage
+            if (Storage::exists($image->path)) {
+                Storage::delete($image->path);
+            }
+
+            // Delete the database record
+            $image->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting image',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

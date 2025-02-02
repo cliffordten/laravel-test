@@ -10,8 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->renameColumn('image', 'image_id');
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->string('filename');
+            $table->string('path');
+            $table->string('url');
+            $table->timestamps();
         });
     }
 
@@ -20,8 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->renameColumn('image_id', 'image');
-        });
+        Schema::dropIfExists('images');
     }
 };
