@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -11,6 +12,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/task/all', [TaskController::class, 'index']);
+    Route::get('/task/{task}', [TaskController::class, 'show']);
+    Route::post('/task/create', [TaskController::class, 'store']);
+    Route::patch('/task/{task}', [TaskController::class, 'update']);
+    Route::delete('/task/{task}', [TaskController::class, 'destroy']);
+    Route::post('/upload-image', [ImageUploadController::class, 'store']);
+    Route::post('/delete-image/{image}', [ImageUploadController::class, 'destroy']);
 });
 
 // Verify email routes
