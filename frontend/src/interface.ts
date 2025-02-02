@@ -26,14 +26,24 @@ export interface User {
   updated_at: string;
 }
 
+export interface ImageProp {
+  id: string;
+  url: string;
+  filename: string;
+}
+
 export interface Task {
   id: number;
-  title: string;
+  name: string;
   description: string;
-  image_url?: string;
-  created_at: string;
-  updated_at: string;
-  user_id: number;
+  completed: boolean;
+  image_id?: string;
+  image?: ImageProp;
+  created_at?: string;
+  updated_at?: string;
+  user_id: string;
+  gps_coordinates?: string;
+  user_ip?: string;
 }
 
 export interface CreateTaskData {
