@@ -9,6 +9,19 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @OA\Schema(
+ *     schema="User",
+ *     required={"name", "email", "password"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="John Doh"),
+ *     @OA\Property(property="email", type="string", example="email@john.com"),
+ *     @OA\Property(property="password", type="hash"),
+ *     @OA\Property(property="email_verified_at", type="string", format="datetime"),
+ *     @OA\Property(property="created_at", type="string", format="datetime"),
+ *     @OA\Property(property="updated_at", type="string", format="datetime"),
+ * )
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */

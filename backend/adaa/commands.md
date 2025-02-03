@@ -4,4 +4,5 @@ docker run --rm -v $(pwd)/adaa:/var/www -w /var/www composer require laravel/san
 docker run --rm -v $(pwd)/adaa:/var/www -w /var/www composer dump-autoload
 docker compose run --rm composer
 docker exec -it laravel_app php artisan make:controller AuthController
+docker exec -it laravel_app php artisan l5-swagger:generate
 docker exec -it laravel_app php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
