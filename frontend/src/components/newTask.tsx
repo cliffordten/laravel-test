@@ -45,12 +45,14 @@ export const taskSchema = Yup.object().shape({
 
 interface NewTaskModalProps {
   isOpen: boolean;
+  error?: string | null;
   onClose: () => void;
   onSubmit: (values: any) => void;
 }
 
 export const NewTaskModal: React.FC<NewTaskModalProps> = ({
   isOpen,
+  error,
   onClose,
   onSubmit,
 }) => {
@@ -77,6 +79,13 @@ export const NewTaskModal: React.FC<NewTaskModalProps> = ({
         <DialogHeader>
           <DialogTitle>Add New Task</DialogTitle>
         </DialogHeader>
+
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <Formik
           initialValues={{
             name: "",

@@ -27,35 +27,30 @@ export interface User {
 }
 
 export interface ImageProp {
-  id: string;
+  id: number;
   url: string;
   filename: string;
+}
+
+export interface userProp {
+  id: number;
+  name: string;
+  email: string;
 }
 
 export interface Task {
   id: number;
   name: string;
   description: string;
-  completed: boolean;
-  image_id?: string;
+  completed: number;
+  image_id?: number;
   image?: ImageProp;
+  user?: userProp;
   created_at?: string;
   updated_at?: string;
-  user_id: string;
+  user_id: number;
   gps_coordinates?: string;
   user_ip?: string;
-}
-
-export interface CreateTaskData {
-  title: string;
-  description: string;
-  image?: File;
-}
-
-export interface UpdateTaskData {
-  title?: string;
-  description?: string;
-  image?: File;
 }
 
 export interface ApiResponse<T> {

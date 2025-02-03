@@ -1,11 +1,10 @@
 "use client";
 import {
   ApiResponse,
-  CreateTaskData,
+  ImageProp,
   LoginCredentials,
   RegisterData,
   Task,
-  UpdateTaskData,
   User,
 } from "@/interface";
 import {
@@ -104,11 +103,15 @@ class ApiService {
     return this.request<Task[]>("/task/all");
   }
 
+  async getMyTasks(): Promise<ApiResponse<Task[]>> {
+    return this.request<Task[]>("/task/me");
+  }
+
   async getTask(id: number): Promise<ApiResponse<Task>> {
     return this.request<Task>(`/task/${id}`);
   }
 
-  async createTask(taskData: CreateTaskData): Promise<ApiResponse<Task>> {
+  async createTask(taskData: Task): Promise<ApiResponse<Task>> {
     const formData = new FormData();
 
     Object.entries(taskData).forEach(([key, value]) => {
@@ -116,7 +119,9 @@ class ApiService {
         if (key === "image" && value instanceof File) {
           formData.append("image", value);
         } else {
-          formData.append(key, value.toString());
+          if (value) {
+            formData.append(key, value.toString());
+          }
         }
       }
     });
@@ -130,7 +135,7 @@ class ApiService {
 
   async updateTask(
     id: number,
-    taskData: UpdateTaskData
+    taskData: Partial<Task>
   ): Promise<ApiResponse<Task>> {
     const formData = new FormData();
     formData.append("_method", "PATCH");
@@ -140,7 +145,9 @@ class ApiService {
         if (key === "image" && value instanceof File) {
           formData.append("image", value);
         } else {
-          formData.append(key, value.toString());
+          if (value) {
+            formData.append(key, value.toString());
+          }
         }
       }
     });
@@ -159,11 +166,11 @@ class ApiService {
   }
 
   // Image methods
-  async uploadImage(image: File): Promise<ApiResponse<{ url: string }>> {
+  async uploadImage(image: File): Promise<ApiResponse<ImageProp>> {
     const formData = new FormData();
     formData.append("image", image);
 
-    return this.request<{ url: string }>("/upload-image", {
+    return this.request<ImageProp>("/upload-image", {
       method: "POST",
       body: formData,
       includeFiles: true,
