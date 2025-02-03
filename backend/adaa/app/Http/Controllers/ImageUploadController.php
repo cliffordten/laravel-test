@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Image;
+use App\Helpers\Utils;
 
 class ImageUploadController extends Controller
 {
-
     public function upload(Request $request)
     {
         $request->validate([
@@ -18,17 +18,9 @@ class ImageUploadController extends Controller
         try {
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $filename = time() . '_' . $file->getClientOriginalName();
 
-                // Store the file
-                $path = $file->storeAs('public/images', $filename);
-
-                // Create database record
-                $image = Image::create([
-                    'filename' => $filename,
-                    'path' => $path,
-                    'url' => Storage::url($path)
-                ]);
+                // Create database record with correct URL path
+                $image = Utils::saveFileToDisk($file);
 
                 return response()->json([
                     'success' => true,
@@ -60,9 +52,9 @@ class ImageUploadController extends Controller
         try {
             $image = Image::findOrFail($id);
 
-            // Delete the file from storage
-            if (Storage::exists($image->path)) {
-                Storage::delete($image->path);
+            // Delete the file from storage using public disk
+            if (Storage::disk('public')->exists($image->path)) {
+                Storage::disk('public')->delete($image->path);
             }
 
             // Delete the database record

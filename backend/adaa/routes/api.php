@@ -13,6 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/task/all', [TaskController::class, 'index']);
+    Route::get('/task/me', [TaskController::class, 'mine']);
     Route::get('/task/{task}', [TaskController::class, 'show']);
     Route::post('/task/create', [TaskController::class, 'store']);
     Route::patch('/task/{task}', [TaskController::class, 'update']);
