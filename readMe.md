@@ -84,21 +84,40 @@ laravel_test/
    DB_PASSWORD=your_password
    ```
 
-5. Generate application key:
+5. Mail credentials (using mine):
+   ```
+   MAIL_MAILER=smtp
+   MAIL_SCHEME=null
+   MAIL_HOST=smtp.mailtrap.io
+   MAIL_PORT=2525
+   MAIL_USERNAME=59e63fe0dfd131
+   MAIL_PASSWORD=3656932d3ea03a
+   MAIL_ENCRYPTION=tls
+   MAIL_FROM_ADDRESS=bisynerd@gmail.com
+   MAIL_FROM_NAME="ADAA"
+   ```
+
+6. Generate application key:
    ```bash
    php artisan key:generate
    ```
 
-6. Run database migrations:
+7. Run database migrations:
    ```bash
    php artisan migrate
    ```
 
-7. Start the development server:
+8. Start the development server:
    ```bash
    php artisan serve
    ```
    The application will be available at http://localhost:8000
+
+9. To enable swagger documentation add this to the `.env`
+   ```
+   L5_SWAGGER_GENERATE_ALWAYS=true
+   L5_SWAGGER_UI_ENABLED=true
+   ```
 
 ## Frontend Setup
 
