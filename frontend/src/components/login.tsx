@@ -29,7 +29,7 @@ const LoginPage = () => {
       setSuccess(response?.message ?? "");
       setTimeout(() => {
         router.replace("/");
-      }, 5000);
+      }, 1000);
     } catch (error) {
       if (error instanceof Error) {
         setErrors({ general: error.message });
@@ -116,6 +116,17 @@ const LoginPage = () => {
             </Form>
           )}
         </Formik>
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            {"Don't have an account? "}
+            <a
+              href="/register"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign up
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
